@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<center>
+    <h1>简单的留言板</h1>
+    <a href="/">搜有留言</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/index/add">添加留言</a>
+    {% for val in data%}
+    <div style="border: 1px red solid">
+        <ul>
+            <li>标题：{{val.title}}</li>
+            <li>内容：{{val.content}}</li>
+            <li><a href="/index/del/id/{{val.id}}">删除</a></li>
+        </ul>
+    </div>
+    {% endfor%}
+    <h3>@2016超简单留言板</h3>
+</center>
+{% endblock %}
