@@ -1,4 +1,5 @@
 <?php
+session_start();
 /*
  * 入口文件
  * 1定义常量

@@ -3,74 +3,109 @@ namespace app\ctrl;
 use core\lib\model;
 
 class indexCtrl extends \core\imooc{
-    //所有留言
-//    public function index(){
-//        echo 123;
-//    }
+    //首页
     public function index(){
+        $this->display('index.html');
+    }
+    //列表
+    public function lists(){
         $model = new \app\model\testModel();
         $data = $model->all();
         $this->assign('data',$data);
-        $this->display('index.html');
+        $this->display('lists.html');
     }
-    //添加留言
+    //每一条的详细信息
     public function add(){
-        $this->display('add.html');
+        $id = get('id');
+        $model = new \app\model\testModel();
+        $data = $model->selectOne($id);
+        $this->assign('data',$data);
+        $this->display('message.html');
     }
-    //保存留言
-    public function save(){
+    //遮罩层添加
+    public function commit(){
         $data['title'] = post('title');
         $data['content'] = post('content');
+        $data['times'] = date('Y-m-d H:m:i',time());
         $model = new \app\model\testModel();
-        $ret = $model->addOne($data);
-        if($ret){
-            jump("/");
+        $data = $model->addOne($data);
+        if($data){
+            jump('/index/lists');
         }else{
-            echo "no";
+            exit('添加失败');
         }
     }
-    //删除留言
-    public function del(){
-        $id = get('id',0,'int');
-        if($id){
+    //登录
+    public function login(){
+        $this->display('login.html');
+    }
+    //判断
+    public function islogin(){
+        $username  = post('username');
+        $pwd  = post('pwd');
+        $model = new \app\model\testModel();
+        $data = $model->islogin($username,$pwd);
+        $a = $data['0']['id'];
+        if($data){
+            $_SESSION['id']=$a;
+            $this->display('first.html');
+        }else{
+            exit('登录失败');
+        }
+    }
+    //个人中心
+    public function first(){
+        if(empty($_SESSION['id'])){
+            jump('/index/login');
+        }else{
+            $id=$_SESSION['id'];
             $model = new \app\model\testModel();
-            $ret = $model->delOne($id);
-            if($ret){
-                jump('/');
-            }else{
-                exit('删除失败');
-            }
-        }else{
-            exit('参数错误');
+            $data = $model->person($id);
+            $this->assign('data',$data);
+            $this->display('first.html');
         }
+
     }
-    //public function index(){
-//        $data = "Hello World";
+
+    //所有留言
+//    public function index1(){
+//        $model = new \app\model\testModel();
+//        $data = $model->all();
 //        $this->assign('data',$data);
 //        $this->display('index.html');
-        //$model = new \app\model\cModel();
-        //单查
-        //$ret = $model->getOne(4);
-        //print_r($ret);
-        //修改
-        //$data = array(
-        //  'name'=>"mvc"
-        //);
-        //$ret  = $model->setOne(4,$data);
-        //删除
-        //$ret  = $model->delOne(8);
-        //dump($ret);
-        //$model = new model();
-        //查询
-        //$data = $model->select('c','*');
-        //插入
-//        $data = array(
-//          'name'=>"IMOOC"
-//        );
-//        $res = $model->insert('c',$data);
-//        dump($res);
+//    }
+//    //添加留言
+//    public function add(){
+//        $this->display('add.html');
+//    }
+//    //保存留言
+//    public function save(){
+//        $data['title'] = post('title');
+//        $data['content'] = post('content');
+//        $model = new \app\model\testModel();
+//        $ret = $model->addOne($data);
+//        if($ret){
+//            jump("/");
+//        }else{
+//            echo "no";
+//        }
+//    }
+    //删除留言
+//    public function del(){
+//        $id = get('id',0,'int');
+//        if($id){
+//            $model = new \app\model\testModel();
+//            $ret = $model->delOne($id);
+//            if($ret){
+//                jump('/');
+//            }else{
+//                exit('删除失败');
+//            }
+//        }else{
+//            exit('参数错误');
+//        }
+//    }
 
-      //}
 
 }
 

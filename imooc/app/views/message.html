@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,13 +10,18 @@
 </head>
 <body>
 
-<div data-role="page">
-    <div data-role="header">
-        <h1>欢迎来到我的主页</h1>
-    </div>
+<div data-role="page" id="pageone">
+
 
     <div data-role="main" class="ui-content">
-        <p>我现在是一个移动端开发者!!</p>
+        <a href="/index/lists">返回</a>
+        <center>
+        {% for val in data%}
+        标题：{{val.title}}<br/>
+        内容：{{val.content}}<br/>
+        时间：{{val.times}}<br/>
+        {% endfor%}
+        </center>
     </div>
 
     <div data-role="footer" data-position="fixed">
@@ -28,6 +34,7 @@
         </div>
     </div>
 </div>
+
 
 </body>
 </html>
